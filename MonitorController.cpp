@@ -41,3 +41,16 @@ std::map<int, std::vector<int>> MonitorController::getSupportedResolutions() {
 void MonitorController::resetChanges() {
     ChangeDisplaySettingsEx(monitorInfoEx.szDevice, &devModeRest, nullptr, 0, nullptr);
 }
+
+long MonitorController::setResolution(int x, int y) {
+    if (this->resolutions.count(x) == 0) {
+        return -90;
+    }
+    std::vector<int> xVector = this->resolutions[x];
+    if (std::find(xVector.begin(), xVector.end(), y) == xVector.end()) {
+        return -90;
+    }
+    devMode.dmPelsWidth = x;
+    devMode.dmPelsHeight = y;
+    return ChangeDisplaySettingsEx(monitorInfoEx.szDevice, &devMode, nullptr, 0, nullptr);
+}
